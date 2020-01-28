@@ -1,13 +1,15 @@
-#!/bin/bash -x
-declare -A FlipCoin
+#!/bin/bash 
+H=0
+T=1
+declare -A flipCoin
 function flipCoin()
 {
    for((i=1;i<=$1;i++))
    do
-      side=""
       for((j=1;j<=$2;j++))
       do
-         if [ $flip -eq 1 ]
+      	flip=$((RANDOM%2))
+			if [ $flip -eq 1 ]
          then
             side+=H
          else
@@ -15,37 +17,48 @@ function flipCoin()
          fi
       done
       updateCount $side
+      side=""
    done
 }
 
 
-function updateCount()
-{
-   FlipCoin[$1]=$((${FlipCoin[$1]}+1))
+function updateCount(){
+   flipCoin[$1]=$((${flipCoin[$1]} + 1))
 }
 
 function calculatePercentage()
 {
-	for i in ${!FlipCoin[@]}
+	for i in ${!flipCoin[@]}
 	do
-		FlipCoin[$i]=`echo "scale=2; ${FlipCoin[$i]}*100/$noflip" | bc`
+		flipCoin[$i]=`echo "scale=2; ${flipCoin[$i]}*100/$noflip" | bc`
 	done
-	echo "Key        ${!FlipCoin[@]}"
-	echo "Percentage ${FlipCoin[@]}"
+	echo "Key        ${!flipCoin[@]}"
+	echo "Percentage ${flipCoin[@]}"
 }
-read -p "How many times you want to flip a coin: " noflip
-read -p "Enter your choice : 1) Singlet 2) Doublet " choice
-	case $choice in
-   	1)
-      	noOfCoin=1
-      	;;
-   	2)
-      	noOfCoin=2
-      	;;
-   	*)
-      	echo "Invalid Choice"
-      	;;
-	esac
 
+read -p "How many times you want to flip a coin: " noflip
+echo "1) Singlet"
+echo "2) Doublets"
+echo "3) Triplets"
+read -p "Enter your choice : " choice
+
+case $choice in
+   1)
+      noOfCoin=1
+      ;;
+   2)
+      noOfCoin=2
+      ;;
+	3)
+		noOfCoin=3
+		;;
+   *)
+      echo "Invalid Choice"
+      ;;
+esac
+
+${flipCoin[@]}
+${!flipCoin[@]}
 flipCoin $noflip $noOfCoin
 calculatePercentage
+
