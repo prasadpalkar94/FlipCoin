@@ -36,6 +36,15 @@ function calculatePercentage()
 	echo "Percentage ${flipCoin[@]}"
 }
 
+function winningPercentage()
+{
+   echo "Win Combination Percentage"
+   for i in ${!flipCoin[@]}
+   do
+      echo "$i ${flipCoin[$i]}"
+   done | sort -k2 -rn | head -1
+}
+
 read -p "How many times you want to flip a coin: " noflip
 echo "1) Singlet"
 echo "2) Doublets"
@@ -61,4 +70,4 @@ ${flipCoin[@]}
 ${!flipCoin[@]}
 flipCoin $noflip $noOfCoin
 calculatePercentage
-
+winningPercentage
